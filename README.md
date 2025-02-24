@@ -1,8 +1,7 @@
-# Diagnostic Assistant
+# Medical Diagnostic Assistant
+## [**Features**](#features)  [**Installation**](#installation)  [**Usage**](#usage)  [**License**](#license)  [**Contact**](#contact)
 
-## Overview
-
-Diagnostic Assistant is a Streamlit application designed to:
+The Medical Diagnostic Assistant is a Streamlit application designed to:
 
 *   **Assist medical professionals** in making informed and efficient diagnoses.
 *   **Leverage Google's Gemini 2.0 Flash AI model** to analyze medical data.
@@ -145,8 +144,7 @@ To run the Medical Diagnosis Assistant:
 
 3.  **Access the application:** Open your web browser and go to the address displayed in the terminal (usually `http://localhost:8501`).
 
-## Using the application
-This section demonstrates how to use the Medical Diagnosis Assistant through the graphical user interface (GUI).
+4. **Flow:** This section demonstrates how to use the Medical Diagnosis Assistant through the graphical user interface (GUI).
 
 **1: Diagnosing a Condition from a Medical Image**
 
