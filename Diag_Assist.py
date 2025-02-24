@@ -348,17 +348,52 @@ def main():
 
     # Make the title clickable
     title = """
-        <div style="display: flex; justify-content: center;">
-            <h1 style='display: inline;'>
-                <a href="" target="_self" style="text-decoration: none;">🩺 Medical Diagnosis Assistant 💊</a>
-            </h1>
-        </div>
+    <div style="display: flex; justify-content: left;">
+        <h1 style='display: inline; font-family: Merriweather'>
+            <a href="" target="_self" style="text-decoration: none;">Medical Diagnostic Assistant🩺</a>
+        </h1>
+    </div>
     """
     st.markdown(title, unsafe_allow_html=True)
+    
+    st.markdown(
+        """
+        <style>
+        /* Style all tabs */
+        .stTabs [data-baseweb="tab-list"] button {
+            background-color: #e1e1e1; /* Light gray background */
+            color: #333; /* Dark gray text */
+            border: 1px solid #ccc; /* Light gray border */
+            padding: 0.5em 1em; /* Padding around the text */
+            border-radius: 5px; /* Rounded corners */
+            margin-right: 0.25em; /* Spacing between tabs */
+            font-weight: bold; /* Bold text */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Smooth transition for hover effect */
+        }
+        /* Style the selected tab */
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+            background-color: #89cfff; /* Blue background for selected tab */
+            color: black; /* White text for selected tab */
+            border-color: #0492c2; /* Blue border for selected tab */
+        }
+        /* Hover effect for all tabs */
+        .stTabs [data-baseweb="tab-list"] button:hover {
+            background-color: #c8c8c8; /* Darker gray on hover */
+            color: black; /* Black text on hover */
+        }
+         .stTabs [data-baseweb="tab-list"] div[data-testid="stHorizontalBlock"] div {
+        border-bottom: 3px solid #0492c2; /* Change this to blue */
+        }        
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    
     # Add CSS to remove link styling and prevent new tab opening
+    
     st.markdown("""
         <style>
-        a {
+        a {        
             color: inherit; /* blue colors for links too */
             text-decoration: none; /* no underline */
         }
@@ -488,7 +523,7 @@ def main():
             <html>
             <head>
             <style>
-            body {{ font-family: Arial, sans-serif;
+            body {{ font-family: sans-serif;
                     padding-top: 30px;  }} /* add padding to push content down */
             h1 {{ text-align: center; }}
             h2 {{ color: #333; }}
