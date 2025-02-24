@@ -408,7 +408,8 @@ def main():
 
     images = image_upload()
     prompt = st.text_area("Patient Details: History and Symptoms", "Just give output based on image.")  # User prompt is now in the flow
-
+    if not prompt:
+        prompt = "Just give output based on image."
     # Initialize session state *before* the "Generate Diagnosis" button
     if 'show_followup' not in st.session_state:
         st.session_state.show_followup = False
