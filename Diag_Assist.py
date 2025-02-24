@@ -124,7 +124,7 @@ Give output in JSON format
 """
 
 # Initialize Gemini API
-API_KEY = "AIzaSyCInBCFo4UcNACayGtBZCXe8XxpTRohFiA"  # Replace with your Gemini API Key
+API_KEY = "your-API-KEY"  # Replace with your Gemini API Key
 client = genai.Client(api_key=API_KEY)
 
 google_search_tool = Tool(google_search=GoogleSearch())
