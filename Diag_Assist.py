@@ -184,8 +184,7 @@ def call_gemini(contents, sys_ins):
             ),
         )
 
-        r = response.text
-        print("The whole text is:",r)
+        r = response.text        
         a = r.strip('```')
         if a.startswith("json"):
             json_string = a[4:].strip()  # Remove "json" and any leading/trailing whitespace
@@ -336,14 +335,13 @@ def display_results(json_data, images):
         for bias_info in json_data.get('biases', []):
             st.write(f"**Bias:** {bias_info['bias']}")
             st.write(f"**Recommendation:** {bias_info['recommendation']}")
-
-        st.info(json_data.get('important_note', ''))
+    
 
     with tab8:
         st.header("Confidence Level")
         st.write(f"**Confidence Level:** {json_data.get('confidence_level', 'N/A')}%")
 
-
+from datetime import datetime
 def main():
     # Adjust layout to increase working space
     adjust_layout()
@@ -467,6 +465,8 @@ def main():
 
     # Generate PDF if Generate Diagnosis has been run
     if st.button("Generate PDF Report") and 'json_data' in st.session_state:
+        now = datetime.now()
+        formatted_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
         # Access data from session_state
         json_data = st.session_state.json_data
         differential_diagnosis = json_data.get('differential_diagnosis', []) #Get it and make it safe
@@ -488,15 +488,25 @@ def main():
             <html>
             <head>
             <style>
-            body {{ font-family: Arial, sans-serif; }}
+            body {{ font-family: Arial, sans-serif;
+                    padding-top: 30px;  }} /* add padding to push content down */
             h1 {{ text-align: center; }}
             h2 {{ color: #333; }}
             p {{ line-height: 1.6; }}
             .section {{ margin-bottom: 20px; }}
             .contact-details {{ margin-top: 30px; text-align: center; }}
+            .date-time {{ 
+                text-align: right; 
+                font-style: italic; 
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                margin-top: -5px; /* pull the date-time up into the corner */
+            }}
             </style>
             </head>
             <body>
+            <div class="date-time">{formatted_date_time}</div>
             <h1>Medical Diagnosis Assistant Report</h1>
 
             <div class="section">
@@ -556,6 +566,9 @@ def main():
             st.markdown(download_button_str, unsafe_allow_html=True)
         except Exception as e:
              st.error(f"An error occurred during PDF generation: {e}. Please make sure you have followed the instructions to properly install PDF kit and added it to the path, as well as ghost script."," ""Also make sure that differential diagnosis exists for a primary diagnosis. Please upload files or prompt such that it will create a primary diagnosis for it.")
+    
+    json_data = st.session_state.get("json_data", None) #Set it to none so that the data does not throw
+    st.info("This tool is intended for educational and informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Consult a qualified healthcare provider for any health concerns.")   
 
 if __name__ == "__main__":
     main()
