@@ -6,7 +6,6 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 import google.generativeai as genai
-from google.genai.types import Tool, GoogleSearch
 import json
 import io  # Import io
 from pdf2image import convert_from_path  # Import pdf2image
@@ -14,6 +13,7 @@ import pdfkit
 import base64
 from gtts import gTTS
 from dotenv import load_dotenv
+import requests
 
 # This section defines the system instruction for Gemini Pro.
 
@@ -127,12 +127,28 @@ Give output in JSON format
 load_dotenv()
 # Initialize Gemini API
 API_KEY = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
-
+GOOGLE_CX_ID = os.getenv("GOOGLE_CX_ID") or st.secrets.get("GOOGLE_CX_ID")
 # Configure GenAI API
 genai.configure(api_key=API_KEY)
 
-google_search_tool = Tool(google_search=GoogleSearch())
-
+def google_search(query, num_results=5):
+    """Fetch top search results from Google Custom Search API."""
+    url = "https://www.googleapis.com/customsearch/v1"
+    params = {
+        "q": query,
+        "key": GOOGLE_CX_ID,
+        "cx": GOOGLE_CX_ID,
+        "num": num_results
+    }
+    
+    try:
+        response = requests.get(url, params=params)
+        results = response.json()
+        return results.get("items", [])  # Return search results
+    except Exception as e:
+        st.error(f"❌ Google Search API Error: {e}")
+        return []
+    
 # Function to get MIME type
 def get_mime_type(file_path):
     mime_type, _ = mimetypes.guess_type(file_path)
@@ -185,27 +201,34 @@ def image_upload():
 # Function to call Gemini API
 def call_gemini(contents, sys_ins):
     try:
-        model = genai.GenerativeModel("gemini-2.0-flash")  # Correct model
+        model = genai.GenerativeModel("gemini-2.0-flash")
 
-        # Instead of a system message, prepend system instructions directly to user content
-        contents.insert(0, sys_ins)  # Ensure system instruction is the first input
+        # Include system instruction as part of user input
+        contents.insert(0, sys_ins)
+
+        # NEW: Search for relevant articles and add them to the prompt
+        diagnosis_query = contents[1]  # Assuming diagnosis is in the second prompt item
+        search_results = google_search(diagnosis_query)
+        article_links = "\n".join([res["link"] for res in search_results])
+        contents.append(f"\nHere are some related articles: {article_links}")
 
         response = model.generate_content(
-            contents=contents,  # Correct API call
-            generation_config={"temperature": 1}  # No system role, just instructions in input
+            contents=contents,
+            generation_config={"temperature": 1}
         )
 
         if not response or not hasattr(response, "text"):
-            raise ValueError("Received an empty response from Gemini API")        
+            raise ValueError("Received an empty response from Gemini API")
+
         r = response.text.strip('```')
 
-        # Ensure JSON format
         json_string = r[4:].strip() if r.startswith("json") else r
         return json_string
 
     except Exception as e:
         st.error(f"❌ Error calling Gemini API: {e}")
         return None
+
 
 def parse_gemini_response(response_text):
     """Parses the Gemini response, tries harder to fix, and returns None on failure."""
