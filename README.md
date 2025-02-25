@@ -93,12 +93,7 @@ To set up the Medical Diagnosis Assistant, follow these detailed steps:
     pip install -r requirements.txt
     ```
 
-6.  **Configure API Key:**
-
-    *   Obtain a Gemini API key from [Google AI Studio](https://makersuite.google.com/).
-    *   Edit the `Diag_Assist.py` file and replace the placeholder API key ( `"your-API-KEY"`) with your actual Gemini API key.
-
-7.  **Install and Configure Poppler (Required for PDF to Image Conversion):**
+6.  **Install and Configure Poppler (Required for PDF to Image Conversion):**
 
     *   This project uses the `pdf2image` library to convert PDF pages into images, enabling the analysis of PDF reports. Follow these instructions to set up Poppler, a prerequisite for `pdf2image`:
     *   Follow these instructions from [pdf2image's GitHub repository](https://github.com/Belval/pdf2image): The first key instruction is Downloading the correct version of the files. The steps for download are in the GitHub, as mentioned before. Then, for each operating system there are steps to follow, so please do that!
@@ -113,14 +108,25 @@ To set up the Medical Diagnosis Assistant, follow these detailed steps:
         5.  Click "New" and add the path to the Poppler's `bin` directory (e.g., `C:\Poppler\poppler-xx.xx.x\bin`).
         6.  Click "OK" to save the changes.
         7.  **Restart your computer** for the changes to take effect. **Important**: Follow the specific instructions for your operating system, especially on Windows, and add the `bin` folder to the `PATH` to easily allow PDF files to be used on Medical-Diagnosis-Assistant. 
-8.  **Install and Configure wkhtmltopdf (Required for PDF Report Generation):**
+7.  **Install and Configure wkhtmltopdf (Required for PDF Report Generation):**
 
     * To enable the generation of PDF reports summarizing the analysis, follow these steps to install and configure `wkhtmltopdf`:
         *   **Download from official website:** Download and install wkhtmltopdf version 0.12.6 (recommended for compatibility) from the official website: [https://wkhtmltopdf.org/downloads.html](https://wkhtmltopdf.org/downloads.html). Select the installer that corresponds to your specific operating system (Windows, macOS, Linux) and system architecture (64-bit or 32-bit).
         Then do the `bin` address setup in PATH as you did for `pdf2image`.
 *   **Path Addition**: It is similarly required to the PATH of your system, as PDF2image needs to do. To set it up properly, please follow the steps and do exactly as is said! Ensure that the system architecture is correct to have this step fully function.
 
+9.  **Setting Up Environment Variables (`.env` File)**
+Before running the application, you need to configure your **API keys**.  
 
+    1. **Create a new `.env` file** in the project root directory:
+        ```bash
+        .env
+    2. **Open .env** and add the following variables:  
+    ```GOOGLE_API_KEY=your-google-api-key-here```  
+    ```GOOGLE_CX_ID=your-google-cx-id-here```
+    3. **Replace your-google-api-key-here with your actual API keys.**
+       * Google API Key: Get it from Google AI Studio.
+       * Google CX ID: Get it from Google Custom Search.
 ## Usage
 
 To run the Medical Diagnosis Assistant:
