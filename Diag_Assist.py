@@ -5,14 +5,15 @@ import cv2
 import numpy as np
 import streamlit as st
 from PIL import Image
-from google import genai
-from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
+import google.generativeai as genai
+from google.genai.types import Tool, GoogleSearch
 import json
 import io  # Import io
 from pdf2image import convert_from_path  # Import pdf2image
 import pdfkit
 import base64
 from gtts import gTTS
+from dotenv import load_dotenv
 
 # This section defines the system instruction for Gemini Pro.
 
@@ -123,10 +124,12 @@ Analyze the following medical data and generate a list of potential diagnoses to
 }
 Give output in JSON format
 """
-
+load_dotenv()
 # Initialize Gemini API
-API_KEY = "your-API-KEY"  # Replace with your Gemini API Key
-client = genai.Client(api_key=API_KEY)
+API_KEY = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
+
+# Configure GenAI API
+genai.configure(api_key=API_KEY)
 
 google_search_tool = Tool(google_search=GoogleSearch())
 
@@ -141,60 +144,67 @@ def image_upload():
     uploaded_files = st.file_uploader("Reports & Scans", type=["png", "jpg", "jpeg", "pdf"], accept_multiple_files=True)
 
     if uploaded_files:
+        os.makedirs("uploads", exist_ok=True)
+
         for file in uploaded_files:
             file_path = os.path.join("uploads", file.name)
-            os.makedirs("uploads", exist_ok=True)
             with open(file_path, "wb") as f:
                 f.write(file.getbuffer())
-            mime_type = mimetypes.guess_type(file_path)[0]
-            if mime_type in ["image/png", "image/jpg", "image/jpeg"]:
+
+            mime_type = get_mime_type(file_path)
+
+            if mime_type in ["image/png", "image/jpeg"]:
                 image = Image.open(file)
                 img_byte_arr = io.BytesIO()
                 image.save(img_byte_arr, format='PNG')
                 img_byte_arr = img_byte_arr.getvalue()
-                image_part = genai.types.Part.from_bytes(
-                    data=img_byte_arr,
-                    mime_type="image/png"
-                )
+
+                # UPDATED: Upload image using genai.upload_file()
+                with open(file_path, "rb") as f:
+                    image_data = f.read()
+
+                image_part = {"mime_type": "image/png", "data": image_data}
                 images.append((image, image_part, file_path))
+
             elif mime_type == "application/pdf":
                 pdf_images = pdf_to_images(file_path)
                 for img in pdf_images:
                     img_byte_arr = io.BytesIO()
                     img.save(img_byte_arr, format='PNG')
                     img_byte_arr = img_byte_arr.getvalue()
-                    image_part = genai.types.Part.from_bytes(
-                        data=img_byte_arr,
-                        mime_type="image/png"
-                    )
+
+                    # UPDATED: Upload PDF images using genai.upload_file()
+                    image_part = genai.upload_file(file_path, mime_type="image/png")
                     images.append((img, image_part, "pdf page"))
+
             else:
                 st.warning(f"Unsupported file type: {mime_type}")
+
     return images
 
 # Function to call Gemini API
 def call_gemini(contents, sys_ins):
     try:
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=contents,
-            config=GenerateContentConfig(
-                system_instruction=sys_ins,
-                temperature=1,
-                tools=[google_search_tool],
-            ),
+        model = genai.GenerativeModel("gemini-2.0-flash")  # Correct model
+
+        # Instead of a system message, prepend system instructions directly to user content
+        contents.insert(0, sys_ins)  # Ensure system instruction is the first input
+
+        response = model.generate_content(
+            contents=contents,  # Correct API call
+            generation_config={"temperature": 1}  # No system role, just instructions in input
         )
 
-        r = response.text        
-        a = r.strip('```')
-        if a.startswith("json"):
-            json_string = a[4:].strip()  # Remove "json" and any leading/trailing whitespace
-        else:
-            json_string = a
-        print("The json is:", json_string)
+        if not response or not hasattr(response, "text"):
+            raise ValueError("Received an empty response from Gemini API")        
+        r = response.text.strip('```')
+
+        # Ensure JSON format
+        json_string = r[4:].strip() if r.startswith("json") else r
         return json_string
+
     except Exception as e:
-        st.error(f"\u274C Error calling Gemini API: {e}")
+        st.error(f"❌ Error calling Gemini API: {e}")
         return None
 
 def parse_gemini_response(response_text):
