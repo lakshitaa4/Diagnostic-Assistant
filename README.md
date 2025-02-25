@@ -14,6 +14,7 @@ The Medical Diagnostic Assistant is a Streamlit application designed to:
     *   Identification of relevant risk factors
     *   Links to reputable medical articles related to the primary diagnosis
     *   Image analysis details
+    *   Recites the Primary Diagnosis
 *   **Create PDF reports** summarizing the analysis, including:
     *   Patient information
     *   Primary diagnosis details
@@ -29,6 +30,7 @@ The Medical Diagnostic Assistant is a Streamlit application designed to:
 *   **AI-Powered Diagnostic Engine:**
     *   Leverages the Gemini 2.0 Flash model for rapid and insightful diagnostic suggestions.
     *   Provides a ranked list of the top 3-5 potential diagnoses with probability scores.
+    *   Gives the choice to listen to the Primary Diagnoses.
 *   **Comprehensive Evidence-Based Reasoning:**
     *   Explains the reasoning behind each diagnosis, citing specific evidence from the patient data (including images).
     *   Identifies relevant risk factors contributing to each diagnosis.
@@ -160,6 +162,7 @@ To run the Medical Diagnosis Assistant:
 2.  **Provide patient details:** In the "Patient Details: History and Symptoms" text area, enter relevant information about the patient, as extracted from the PDF or from other sources.
 3.  **Generate diagnosis:** Click the "Generate Diagnosis" button.
 4.  **Review the results:** Explore the generated diagnoses, supporting evidence, image analysis (converted from the PDF), and relevant articles in the tabbed interface.
+5.  **Generate Audio Output**
 
 **3: Generating a PDF Report**
 
