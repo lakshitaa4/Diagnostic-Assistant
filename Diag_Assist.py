@@ -228,7 +228,7 @@ def parse_gemini_response(response_text):
         st.error(f"❌ JSON Decode Error: {e}.  Completely invalid JSON response.  Check the prompt and model behavior.  Returning None.")
         return None
 
-# Function to display results
+# Function to adjust layout
 def adjust_layout():
     st.markdown(
         """
@@ -248,7 +248,7 @@ def adjust_layout():
 
 from pdf2image import convert_from_path
 import io
-
+#function to convert pdf to images using pdf2image
 def pdf_to_images(pdf_path):
     """Converts a PDF to a list of PIL Images."""
     try:
@@ -257,7 +257,7 @@ def pdf_to_images(pdf_path):
     except Exception as e:
         st.error(f"Error converting PDF to images: {e}. Is Ghostscript installed?")
         return []
-
+#function to display results
 def display_results(json_data, images):
     if not json_data:
         st.error("\u274C No valid data to display. Please check the prompt and model's output.")
@@ -549,7 +549,7 @@ def main():
           """ #If its great add these elements
         else:
           primary_diagnosis_str = "<p>No diagnosis found.</p>" #If not do not add
-
+        #html for html to pdf generation
         report_html = f"""
             <!DOCTYPE html>
             <html>
