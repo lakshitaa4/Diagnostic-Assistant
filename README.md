@@ -1,4 +1,4 @@
-# AI Powered Medical Diagnostic Assistant
+# AI-Powered Medical Diagnostic Assistant
 ## [**Features**](#features)  [**Installation**](#installation)  [**Usage**](#usage)  [**License**](#license)  [**Contact**](#contact)
 
 The Medical Diagnostic Assistant is a Streamlit application designed to:
