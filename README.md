@@ -1,4 +1,4 @@
-# Medical Diagnostic Assistant
+# AI Powered Medical Diagnostic Assistant
 ## [**Features**](#features)  [**Installation**](#installation)  [**Usage**](#usage)  [**License**](#license)  [**Contact**](#contact)
 
 The Medical Diagnostic Assistant is a Streamlit application designed to:
@@ -99,7 +99,8 @@ To set up the Medical Diagnosis Assistant, follow these detailed steps:
 7.  **Install and Configure Poppler (Required for PDF to Image Conversion):**
 
     *   This project uses the `pdf2image` library to convert PDF pages into images, enabling the analysis of PDF reports. Follow these instructions to set up Poppler, a prerequisite for `pdf2image`:
-    *   **Download and Setup Guide Follow these instructions from [pdf2image's GitHub repository](https://github.com/Belval/pdf2image).: The first key instruction is Downloading the correct version of the files. The steps for download are in the GitHub, as mentioned before. Then, for each operating system there are steps to follow, so please do that!
+    *   Follow these instructions from [pdf2image's GitHub repository](https://github.com/Belval/pdf2image): The first key instruction is Downloading the correct version of the files. The steps for download are in the GitHub, as mentioned before. Then, for each operating system there are steps to follow, so please do that!
+    For windows, do this too:
     *   Locate and copy the "bin" folder path, like `C:\Users\your_username\Downloads\poppler-xx.xx.x\bin`, this is just an example
     *   Then Navigate to bin folder, and copy address
     *   **PATH Set-Up**:The next key part is adding to your system's PATH. Here’s how:
