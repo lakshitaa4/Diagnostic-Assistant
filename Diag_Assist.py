@@ -12,6 +12,7 @@ import io  # Import io
 from pdf2image import convert_from_path  # Import pdf2image
 import pdfkit
 import base64
+from gtts import gTTS
 
 # This section defines the system instruction for Gemini Pro.
 
@@ -279,6 +280,26 @@ def display_results(json_data, images):
             st.write(f"**Risk Factors:** {differential_diagnosis[0].get('risk_factors', 'N/A')}") #fixed
         else:
             st.write("No diagnoses found.")
+        if st.button("Speak Primary Diagnosis"):
+            if differential_diagnosis:
+                primary_diagnosis = max(differential_diagnosis, key=lambda x: x['probability'])
+                diagnosis_text = f"The primary diagnosis is {primary_diagnosis['diagnosis']} with a probability of {primary_diagnosis['probability']}%."
+                
+                # Create gTTS object
+                tts = gTTS(text=diagnosis_text, lang='en') # 'en' for English, change as needed
+                
+                # Save as temporary audio file (better for Streamlit)
+                audio_file = os.path.join("temp", "diagnosis.mp3")
+                os.makedirs("temp", exist_ok=True) # Ensure temp directory exists
+                tts.save(audio_file)
+
+
+                # Play audio in Streamlit
+                audio_file = open(audio_file, 'rb')
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format='audio/mp3')
+            else:
+                st.write("No diagnoses found.")
 
     with tab3:
         st.header("Other Diagnoses")
