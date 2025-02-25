@@ -1,4 +1,5 @@
 # AI-Powered Medical Diagnostic Assistant
+🚀 **[Try the Live Demo on Hugging Face!](https://huggingface.co/spaces/laksss/Diagnostic-Assistant)**  
 ## [**Features**](#features)  [**Installation**](#installation)  [**Usage**](#usage)  [**License**](#license)  [**Contact**](#contact)
 
 The Medical Diagnostic Assistant is a Streamlit application designed to:
