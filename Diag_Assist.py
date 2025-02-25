@@ -12,7 +12,7 @@ from pdf2image import convert_from_path  # Import pdf2image
 import pdfkit
 import base64
 from gtts import gTTS
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import requests
 
 # This section defines the system instruction for Gemini Pro.
@@ -124,7 +124,7 @@ Analyze the following medical data and generate a list of potential diagnoses to
 }
 Give output in JSON format
 """
-load_dotenv()
+#load_dotenv()
 # Initialize Gemini API
 API_KEY = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
 GOOGLE_CX_ID = os.getenv("GOOGLE_CX_ID") or st.secrets.get("GOOGLE_CX_ID")
